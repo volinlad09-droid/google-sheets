@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Output Verification and Responsible Use Policy & Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0f172a;
+      --primary-accent: #2563eb;
+      --secondary-accent: #475569;
+      --bg-page: #f8fafc;
+      --surface: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --warning-bg: #fffbeb;
+      --warning-border: #fcd34d;
+      --warning-text: #92400e;
+      --danger-bg: #fef2f2;
+      --danger-border: #fca5a5;
+      --danger-text: #991b1b;
+      --success-bg: #f0fdf4;
+      --success-border: #86efac;
+      --success-text: #166534;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Floating Print Control */
+    .action-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      color: #f8fafc;
+    }
+
+    .action-bar-title {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-btn {
+      background: var(--primary-accent);
+      color: #ffffff;
+      border: none;
+      padding: 9px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .action-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    /* Document Sheet Container */
+    .document-wrapper {
+      max-width: 850px;
+      margin: 40px auto 60px auto;
+      background: var(--surface);
+      padding: 64px 72px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Header */
+    .doc-header {
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 24px;
+      margin-bottom: 36px;
+    }
+
+    .doc-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--primary-accent);
+      background: #eff6ff;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+
+    .doc-title {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .doc-subtitle {
+      font-size: 16px;
+      color: var(--secondary-accent);
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      background: #f8fafc;
+      padding: 14px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      border: 1px solid #edf2f7;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .meta-value {
+      font-weight: 600;
+      color: var(--text-main);
+      margin-top: 2px;
+    }
+
+    /* Executive Callout */
+    .executive-summary {
+      background: #f8fafc;
+      border-left: 4px solid var(--primary-accent);
+      padding: 20px 24px;
+      margin-bottom: 36px;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .executive-summary h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .executive-summary p {
+      font-size: 14.5px;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    /* Section Styling */
+    .section-block {
+      margin-bottom: 36px;
+      page-break-inside: avoid;
+    }
+
+    .section-heading {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .body-prose {
+      font-size: 14.5px;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      line-height: 1.65;
+    }
+
+    /* Key Points / List */
+    .guideline-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .guideline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .guideline-item i {
+      color: var(--primary-accent);
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    .guideline-item strong {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Callout Boxes */
+    .callout-box {
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 13.5px;
+      margin-top: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.5;
+    }
+
+    .callout-box.warning {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--warning-text);
+    }
+
+    .callout-box.danger {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--danger-text);
+    }
+
+    .callout-box.info {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+    }
+
+    .callout-box i {
+      font-size: 16px;
+      margin-top: 2px;
+    }
+
+    /* Checklist Table */
+    .verification-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 13.5px;
+    }
+
+    .verification-table th {
+      background: #f1f5f9;
+      color: var(--primary);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+    }
+
+    .verification-table td {
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      vertical-align: top;
+    }
+
+    .verification-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* Sign-off / Policy Footer */
+    .doc-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Print Specific Media Rules */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+
+      .action-bar {
+        display: none !important;
+      }
+
+      .document-wrapper {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 18mm 18mm 18mm 18mm;
+      }
+
+      .section-block {
+        page-break-inside: avoid;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Action Bar -->
+  <div class="action-bar">
+    <div class="action-bar-title">
+      <i class="fa-solid fa-file-shield"></i>
+      Standard Operating Guidance: Responsible AI Utilization
+    </div>
+    <button class="action-btn" onclick="window.print()">
+      <i class="fa-solid fa-print"></i>
+      Print / Save as PDF
+    </button>
+  </div>
+
+  <div class="document-wrapper">
+    <!-- Header -->
+    <header class="doc-header">
+      <div class="doc-badge">Operational Policy & Practice Guide</div>
+      <h1 class="doc-title">AI Output Verification & Responsible Use</h1>
+      <p class="doc-subtitle">Framework for safe, compliant, and verified integration of Large Language Models</p>
+      
+      <div class="meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">Classification</span>
+          <span class="meta-value">Operational Standard</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Core Principle</span>
+          <span class="meta-value">Human-in-the-Loop (HITL)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Applies To</span>
+          <span class="meta-value">All Staff, Engineers & Writers</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Executive Summary -->
+    <div class="executive-summary">
+      <h3><i class="fa-solid fa-bullseye"></i> Executive Mandate</h3>
+      <p>
+        Generative Artificial Intelligence is an assistive ideation and drafting tool, not an authoritative knowledge base. Because Large Language Models (LLMs) operate on statistical probability rather than conscious fact retrieval, <strong>all generated text, code, and analytical claims require diligent human verification before publication, distribution, or code execution.</strong>
+      </p>
+    </div>
+
+    <!-- Section 1 -->
+    <section class="section-block">
+      <h2 class="section-heading">
+        <span class="section-num">1</span>
+        Why AI-Generated Responses Can Be Incorrect
+      </h2>
+      <p class="body-prose">
+        AI models predict the most probable subsequent tokens based on pattern distributions within their training corpus. They do not maintain an understanding of factual validity, which leads to predictable failure modalities:
+      </p>
+      <ul class="guideline-list">
+        <li class="guideline-item">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <div><strong>Hallucination:</strong> Models present fabricated assertions with high stylistic fluency and assertive confidence.</div>
+        </li>
+        <li class="guideline-item">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <div><strong>Knowledge Latency:</strong> Offline models possess static cutoff dates and cannot account for recent regulatory, commercial, or factual updates.</div>
+        </li>
+        <li class="guideline-item">
+          <i class="fa-solid fa-brain"></i>
+          <div><strong>Contextual Fragility:</strong> Models lack genuine situational awareness and may misread subtle nuances, edge constraints, or user intent.</div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="section-block">
+      <h2 class="section-heading">
+        <span class="section-num">2</span>
+        Fact-Checking Important Information
+      </h2>
+      <p class="body-prose">
+        Never utilize AI-generated responses as the sole authoritative citation for decisions involving legal, medical, compliance, financial, or engineering domains.
+      </p>
+      <ul class="guideline-list">
+        <li class="guideline-item">
+          <i class="fa-solid fa-check-double"></i>
+          <div><strong>Primary Source Tracing:</strong> Require verification against recognized primary repositories (e.g., official statutory texts, peer-reviewed journals, verified APIs).</div>
+        </li>
+        <li class="guideline-item">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <div><strong>Independent Cross-Referencing:</strong> Corroborate all statistical metrics, monetary figures, and chronological claims across at least two independent verified sources.</div>
+        </li>
+      </ul>
+      <div class="callout-box warning">
+        <i class="fa-solid fa-shield-halved"></i>
+        <div><strong>Rule of Thumb:</strong> If an incorrect claim could incur legal liability, brand harm, or technical disruption, automated AI output must never bypass manual expert review.</div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="section-block">
+      <h2 class="section-heading">
+        <span class="section-num">3</span>
+        Identifying Fabricated References & Unsupported Claims
+      </h2>
+      <p class="body-prose">
+        A recognized risk of modern LLMs is the synthetic generation of academic papers, hyperlinks, and judicial citations that appear genuine but are entirely non-existent.
+      </p>
+      <table class="verification-table">
+        <thead>
+          <tr>
+            <th style="width: 28%;">Artifact Type</th>
+            <th style="width: 36%;">Common AI Hallucination</th>
+            <th style="width: 36%;">Verification Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Hyperlinks & URLs</strong></td>
+            <td>Plausible URL syntax leading to HTTP 404 or hijacked domains.</td>
+            <td>Inspect link targets directly in a secure browser sandbox before sharing.</td>
+          </tr>
+          <tr>
+            <td><strong>Academic Citations</strong></td>
+            <td>Real author names paired with synthetic paper titles or false DOIs.</td>
+            <td>Verify via Google Scholar, CrossRef, PubMed, or institutional library indexes.</td>
+          </tr>
+          <tr>
+            <td><strong>Legal Precedents</strong></td>
+            <td>Invented case names, distorted rulings, or invalid docket numbers.</td>
+            <td>Validate against official court registers, LexisNexis, or Westlaw archives.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="section-block">
+      <h2 class="section-heading">
+        <span class="section-num">4</span>
+        Protecting Personal & Confidential Information
+      </h2>
+      <p class="body-prose">
+        Information submitted to cloud-based public AI tools may be retained for retraining or review by third-party human evaluators, creating severe data breach vectors.
+      </p>
+      <div class="callout-box danger">
+        <i class="fa-solid fa-ban"></i>
+        <div>
+          <strong>Strict Prohibition:</strong> Never input Personally Identifiable Information (PII), proprietary algorithms, credentials, financial ledgers, or non-public customer records into non-enterprise AI systems.
+        </div>
+      </div>
+      <ul class="guideline-list" style="margin-top: 14px;">
+        <li class="guideline-item">
+          <i class="fa-solid fa-lock"></i>
+          <div><strong>Data Masking & Sanitization:</strong> Replace identifiers, keys, and company names with dummy values prior to prompt submission.</div>
+        </li>
+        <li class="guideline-item">
+          <i class="fa-solid fa-file-contract"></i>
+          <div><strong>Contractual Opt-Outs:</strong> Ensure enterprise vendor agreements legally guarantee zero retention for model training (Zero Data Retention / ZDR).</div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Section 5 -->
+    <section class="section-block">
+      <h2 class="section-heading">
+        <span class="section-num">5</span>
+        Copyright, Attribution, and Responsible Content Use
+      </h2>
+      <p class="body-prose">
+        Generative systems may reproduce verbatim passages or stylistic likenesses from copyrighted training data, introducing copyright infringement and plagiarism exposure.
+      </p>
+      <ul class="guideline-list">
+        <li class="guideline-item">
+          <i class="fa-solid fa-pen-nib"></i>
+          <div><strong>Substantive Transformation:</strong> AI outputs must serve solely as outlines or initial brainstorms; human authors must synthesize and refine final deliverables.</div>
+        </li>
+        <li class="guideline-item">
+          <i class="fa-solid fa-signature"></i>
+          <div><strong>Transparent Disclosure:</strong> Adhere to organizational and publisher guidelines regarding transparent declaration of AI involvement in research and creative workflows.</div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Section 6 -->
+    <section class="section-block">
+      <h2 class="section-heading">
+        <span class="section-num">6</span>
+        Reviewing Generated Code Before Running It
+      </h2>
+      <p class="body-prose">
+        AI-generated code frequently contains subtle vulnerabilities, hallucinated library dependencies, or inefficient memory patterns despite looking syntactically clean.
+      </p>
+      <ul class="guideline-list">
+        <li class="guideline-item">
+          <i class="fa-solid fa-bug"></i>
+          <div><strong>Security Scrutiny:</strong> Inspect generated scripts for obsolete dependencies, hardcoded paths, injection vulnerabilities, and broken access controls.</div>
+        </li>
+        <li class="guideline-item">
+          <i class="fa-solid fa-box-open"></i>
+          <div><strong>Package Hallucination:</strong> Attackers often register fake package names hallucinated by AI (slopsquatting). Confirm package legitimacy prior to <code>npm install</code> or <code>pip install</code>.</div>
+        </li>
+        <li class="guideline-item">
+          <i class="fa-solid fa-vial"></i>
+          <div><strong>Isolated Execution:</strong> Always execute unverified code in isolated sandboxes or containers with automated unit tests prior to staging deployment.</div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Section 7 -->
+    <section class="section-block">
+      <h2 class="section-heading">
+        <span class="section-num">7</span>
+        Using AI as an Assistant, Not an Autopilot
+      </h2>
+      <p class="body-prose">
+        The ultimate responsibility for any published output, strategic recommendation, or compiled codebase rests entirely with the human operator.
+      </p>
+      <div class="callout-box info">
+        <i class="fa-solid fa-handshake-angle"></i>
+        <div>
+          <strong>The Co-Pilot Mindset:</strong> Treat generative AI like a brilliant but junior intern—delegate heavy research drafting and structuring, but rigorously verify every assumption, calculation, and assertion.
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="doc-footer">
+      <div>Responsible AI Governance Framework &copy; 2026. All rights reserved.</div>
+      <div>Page 1 of 1 • Ready for PDF Export</div>
+    </footer>
+  </div>
+
+</body>
+</html>
